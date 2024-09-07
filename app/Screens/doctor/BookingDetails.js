@@ -22,11 +22,9 @@ const BookingDetails = ({navigation}) => {
       })
   }, [])
 
-
-  const handleEditBooking = () => {
+const handleEditBooking = () => {
     Alert.alert("Edit Booking", "Redirect to booking editing screen.");
   };
-
 
   const handleDeleteBooking = () => {
     const flag = confirm("Are you sure you want to delete ?")
@@ -40,8 +38,7 @@ const BookingDetails = ({navigation}) => {
         })
     }
   }
-
-  return (
+return (
     <View style={styles.container}>
       {/* Doctor Image */}
       <Image source={{ uri: "https://plus.unsplash.com/premium_photo-1661764878654-3d0fc2eefcca?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8ZG9jdG9yfGVufDB8fDB8fHww" }} style={styles.doctorImage} />

@@ -4,13 +4,25 @@ import DoctorDetails from './Screens/doctor/DoctorDetails';
 import BookingDetails from './Screens/doctor/BookingDetails';
 import AddDoctor from './Screens/doctor/AddDoctor';
 import UpdateDoctor from './Screens/doctor/UpdateDoctor';
+import Main from './Screens/doctor/Main';
 const Stack = createStackNavigator();
 
 
 export default function App() {
   return (
     <NavigationContainer  >
-      <Stack.Navigator initialRouteName="Add Doctors">
+      <Stack.Navigator initialRouteName="Main">
+
+      <Stack.Screen name="Main" component={Main} options={{
+          headerStyle: {
+            backgroundColor: '#7A1CAC',
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'semibold',
+          },
+
+        }} />
         <Stack.Screen name="Add Doctors" component={AddDoctor} options={{
           headerStyle: {
             backgroundColor: '#7A1CAC',

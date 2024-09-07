@@ -34,7 +34,7 @@ const UpdateDoctor = ({ navigation }) => {
     axios.put(`http://localhost:5001/doctors/${id}`, singleDoctor)
       .then(() => {
         alert("Doctor Update");
-        navigation.navigate("Booking Details");
+        navigation.navigate("Doctor Details");
       })
       .catch((err) => {
         console.log(err);

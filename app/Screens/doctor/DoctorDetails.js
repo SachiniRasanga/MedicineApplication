@@ -5,10 +5,9 @@ import { FlatList, Image, StyleSheet, Text, View, TouchableOpacity } from 'react
 const DoctorDetails = ({ navigation }) => {
 
     const [doctors, setDoctors] = useState([]);
-    
+
     //api call
     useEffect(() => {
-
         axios.get("http://localhost:5001/doctors")
             .then((response) => {
                 setDoctors(response.data);
@@ -21,25 +20,22 @@ const DoctorDetails = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-
             <FlatList
-
                 data={doctors?.map(item => item) || []}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
                     <View style={styles.itemContainer}>
-
                         <Image source={{ uri: "https://plus.unsplash.com/premium_photo-1661766718556-13c2efac1388?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" }} style={styles.image} />
-                        <View>
+                        
+                        <View style={styles.detailsAndButtonContainer}>
+                            <View style={styles.detailsContainer}>
+                                <Text style={styles.name}>{item.name}</Text>
+                                <Text style={styles.specialization}>{item.specialization}</Text>
+                            </View>
                             <TouchableOpacity style={styles.button}
-                                onPress={() => navigation.navigate('Booking Details', {id: item.id})}>
+                                onPress={() => navigation.navigate('Booking Details', { id: item.id })}>
                                 <Text style={styles.buttonText}>MANAGE</Text>
-                            </TouchableOpacity></View>
-                        <View style={styles.detailsContainer}>
-
-                            <Text style={styles.name}>{item.name}</Text>
-
-                            <Text style={styles.specialization}>{item.specialization}</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 )}
@@ -72,42 +68,43 @@ const styles = StyleSheet.create({
         height: 80,
         borderRadius: 40,
     },
-    detailsContainer: {
-        marginLeft: 15,
+    detailsAndButtonContainer: {
+        flex: 1,
+        marginLeft: 40,
         justifyContent: 'center',
+    },
+    detailsContainer: {
+        marginBottom: 10,
     },
     name: {
         fontSize: 18,
         fontWeight: 'bold',
-        textAlign: 'center',
-        marginLeft: '20px'
     },
     specialization: {
         fontSize: 15,
-        marginLeft: '20px',
-        marginTop: 10,
+        marginTop: 5,
         color: '#555',
-
     },
     button: {
         backgroundColor: '#7A1CAC',
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        marginTop: 20, // Center vertically
-        borderRadius: 25,
+        paddingVertical: 5, // Reduced padding for a smaller button
+        paddingHorizontal: 15, // Adjusted horizontal padding
+        borderRadius: 15, // Smaller radius for a smaller button
         shadowColor: '#000',
+        padding:10,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
+        width: 80, // Set a fixed width (use numeric value)
         elevation: 5,
-        marginLeft: 25, // Use numbers for positioning in React Native, not 'px'
+        justifyContent: 'center', // Centers the text inside the button horizontally
+        alignItems: 'center',     // Centers the text inside the button vertically
     },
+    
     buttonText: {
-        color: '#FFFFFF', // Use the correct spelling 'color'
-        fontSize: 16,
+        color: '#FFFFFF',
+        fontSize: 12, // Reduced font size
         fontWeight: 'bold',
         textAlign: 'center',
     },
 });
-
-

@@ -5,8 +5,7 @@ import { FlatList, Image, StyleSheet, Text, View, TouchableOpacity } from 'react
 const DoctorDetails = ({ navigation }) => {
 
     const [doctors, setDoctors] = useState([]);
-    const [singleUser ,setsingleUser]=useState([]);
-
+    
     //api call
     useEffect(() => {
 
@@ -19,24 +18,6 @@ const DoctorDetails = ({ navigation }) => {
                 console.log(err);
             })
     }, [])
-     
-
-    // Get by id
-
-   function getsingleUser(id){
-    useEffect(()=>{
-        axios.get(`https://jsonplaceholder.typicode.com/doctors/${id}`)
-            .then((response) => {
-                setsingleUser(response.data);
-                console.log(response.data)
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-
-    },[])
-
-   }
 
     return (
         <View style={styles.container}>
@@ -50,9 +31,9 @@ const DoctorDetails = ({ navigation }) => {
 
                         <Image source={{ uri: "https://plus.unsplash.com/premium_photo-1661766718556-13c2efac1388?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" }} style={styles.image} />
                         <View>
-                            <TouchableOpacity style={styles.button} 
-                             onPress={() => navigation.navigate('Booking Details')}>
-                                <Text style={styles.buttonText}>BOOK</Text>
+                            <TouchableOpacity style={styles.button}
+                                onPress={() => navigation.navigate('Booking Details', {id: item.id})}>
+                                <Text style={styles.buttonText}>MANAGE</Text>
                             </TouchableOpacity></View>
                         <View style={styles.detailsContainer}>
 

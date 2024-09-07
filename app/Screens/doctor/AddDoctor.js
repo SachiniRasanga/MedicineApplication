@@ -1,8 +1,9 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 
-const AddDoctor = ({navigation}) => {
-  const [doctorName, setDoctorName] = useState('');
+const AddDoctor = ({ navigation }) => {
+  const [name, setName] = useState('');
   const [hospitalName, setHospitalName] = useState('');
   const [specialization, setSpecialization] = useState('');
   const [mobileNumber, setMobileNumber] = useState('');
@@ -10,26 +11,41 @@ const AddDoctor = ({navigation}) => {
   const [age, setAge] = useState('');
   const [description, setDescription] = useState('');
 
-  const handleSubmit = () => {
+  const handleSubmitBtn = () => {
     // Handle form submission
-    console.log({
-      doctorName,
+    const doctorData = {
+      name,
       hospitalName,
       specialization,
       mobileNumber,
       address,
       age,
       description
-    });
+    }
+
+    console.log(doctorData);
+
+    saveDoctor(doctorData)
+
   };
+
+  function saveDoctor(doctorData) {
+    axios.post("http://localhost:5001/doctors", doctorData)
+      .then(() => {
+        alert("Doctor Saved")
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.label}>Doctor Name</Text>
       <TextInput
         style={styles.input}
-        value={doctorName}
-        onChangeText={setDoctorName}
+        value={name}
+        onChangeText={setName}
         placeholder="Enter doctor name"
       />
 
@@ -84,12 +100,17 @@ const AddDoctor = ({navigation}) => {
         multiline
       />
 
-<TouchableOpacity 
-    style={styles.button} 
-    onPress={() => navigation.navigate('Doctor Details')}
-  >
-    <Text style={styles.buttonText}>Submit</Text>
-  </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.button}
+        // onPress={() => navigation.navigate('Doctor Details')}
+
+        onPress={() => {
+          handleSubmitBtn()
+          navigation.navigate('Doctor Details')
+        }}
+      >
+        <Text style={styles.buttonText}>Submit</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };

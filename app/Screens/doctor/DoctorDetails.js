@@ -4,15 +4,15 @@ import { FlatList, Image, StyleSheet, Text, View, TouchableOpacity } from 'react
 
 const DoctorDetails = ({ navigation }) => {
 
-    const [users, setUsers] = useState([]);
+    const [doctors, setDoctors] = useState([]);
     const [singleUser ,setsingleUser]=useState([]);
 
     //api call
     useEffect(() => {
 
-        axios.get("https://jsonplaceholder.typicode.com/users")
+        axios.get("http://localhost:5001/doctors")
             .then((response) => {
-                setUsers(response.data);
+                setDoctors(response.data);
                 console.log(response.data)
             })
             .catch((err) => {
@@ -25,7 +25,7 @@ const DoctorDetails = ({ navigation }) => {
 
    function getsingleUser(id){
     useEffect(()=>{
-        axios.get(`https://jsonplaceholder.typicode.com/users/${id}`)
+        axios.get(`https://jsonplaceholder.typicode.com/doctors/${id}`)
             .then((response) => {
                 setsingleUser(response.data);
                 console.log(response.data)
@@ -43,7 +43,7 @@ const DoctorDetails = ({ navigation }) => {
 
             <FlatList
 
-                data={users?.map(item => item) || []}
+                data={doctors?.map(item => item) || []}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
                     <View style={styles.itemContainer}>
@@ -58,7 +58,7 @@ const DoctorDetails = ({ navigation }) => {
 
                             <Text style={styles.name}>{item.name}</Text>
 
-                            <Text style={styles.specialization}>{item.address.city}</Text>
+                            <Text style={styles.specialization}>{item.specialization}</Text>
                         </View>
                     </View>
                 )}

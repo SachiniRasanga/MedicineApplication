@@ -1,75 +1,78 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { useRoute } from "@react-navigation/native"
 
-const AddDoctor = ({ navigation }) => {
-  const [name, setName] = useState('');
-  const [hospitalName, setHospitalName] = useState('');
-  const [specialization, setSpecialization] = useState('');
-  const [mobileNumber, setMobileNumber] = useState('');
-  const [address, setAddress] = useState('');
-  const [age, setAge] = useState('');
-  const [description, setDescription] = useState('');
+const UpdateDoctor = ({ navigation }) => {
 
-  const handleSubmitBtn = () => {
-    // Handle form submission
-    const doctorData = {
-      name,
-      hospitalName,
-      specialization,
-      mobileNumber,
-      address,
-      age,
-      description
-    }
+  const route = useRoute();
+  const id = route.params?.id;
 
-    console.log(doctorData);
+  const [singleDoctor, setSingleDoctor] = useState([]);
 
-    saveDoctor(doctorData)
-
-  };
-
-  function saveDoctor(doctorData) {
-    axios.post("http://localhost:5001/doctors", doctorData)
-      .then(() => {
-        alert("Doctor Saved")
+  // Get by id
+  useEffect(() => {
+    axios.get(`http://localhost:5001/doctors/${id}`)
+      .then((response) => {
+        setSingleDoctor(response.data);
+        console.log(response.data)
       })
       .catch((err) => {
         console.log(err);
       })
-  }
+  }, [])
+
+  const handleChange = (name, value) => {
+    setSingleDoctor({
+      ...singleDoctor,
+      [name]: value
+    });
+  };
+
+  const handleUpdateBtn = () => {
+
+    axios.put(`http://localhost:5001/doctors/${id}`, singleDoctor)
+      .then(() => {
+        alert("Doctor Update");
+        navigation.navigate("Booking Details");
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.label}>Doctor Name</Text>
       <TextInput
         style={styles.input}
-        value={name}
-        onChangeText={setName}
+        value={singleDoctor.name}
+        onChangeText={(text) => handleChange('name', text)}
         placeholder="Enter doctor name"
       />
 
       <Text style={styles.label}>Hospital Name</Text>
       <TextInput
         style={styles.input}
-        value={hospitalName}
-        onChangeText={setHospitalName}
+        value={singleDoctor.hospitalName}
+        onChangeText={(text) => handleChange('hospitalName', text)}
         placeholder="Enter hospital name"
       />
 
       <Text style={styles.label}>Specialization</Text>
       <TextInput
         style={styles.input}
-        value={specialization}
-        onChangeText={setSpecialization}
+        value={singleDoctor.specialization}
+        onChangeText={(text) => handleChange('specialization', text)}
         placeholder="Enter specialization"
       />
 
       <Text style={styles.label}>Mobile Number</Text>
       <TextInput
         style={styles.input}
-        value={mobileNumber}
-        onChangeText={setMobileNumber}
+        value={singleDoctor.mobileNumber}
+        onChangeText={(text) => handleChange('mobileNumber', text)}
         placeholder="Enter mobile number"
         keyboardType="phone-pad"
       />
@@ -77,16 +80,16 @@ const AddDoctor = ({ navigation }) => {
       <Text style={styles.label}>Address</Text>
       <TextInput
         style={styles.input}
-        value={address}
-        onChangeText={setAddress}
+        value={singleDoctor.address}
+        onChangeText={(text) => handleChange('address', text)}
         placeholder="Enter address"
       />
 
       <Text style={styles.label}>Age</Text>
       <TextInput
         style={styles.input}
-        value={age}
-        onChangeText={setAge}
+        value={singleDoctor.age}
+        onChangeText={(text) => handleChange('age', text)}
         placeholder="Enter age"
         keyboardType="numeric"
       />
@@ -94,8 +97,8 @@ const AddDoctor = ({ navigation }) => {
       <Text style={styles.label}>Description</Text>
       <TextInput
         style={[styles.input, styles.textArea]}
-        value={description}
-        onChangeText={setDescription}
+        value={singleDoctor.description}
+        onChangeText={(text) => handleChange('description', text)}
         placeholder="Enter description"
         multiline
       />
@@ -105,11 +108,11 @@ const AddDoctor = ({ navigation }) => {
         // onPress={() => navigation.navigate('Doctor Details')}
 
         onPress={() => {
-          handleSubmitBtn()
+          handleUpdateBtn();
           navigation.navigate('Doctor Details')
         }}
       >
-        <Text style={styles.buttonText}>Submit</Text>
+        <Text style={styles.buttonText}>Update Doctor</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -149,4 +152,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddDoctor;
+export default UpdateDoctor;

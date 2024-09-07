@@ -4,61 +4,42 @@ import { FlatList, Image, StyleSheet, Text, View, TouchableOpacity } from 'react
 
 const DoctorDetails = ({ navigation }) => {
 
-    const [users, setUsers] = useState([]);
-    const [singleUser ,setsingleUser]=useState([]);
-
+    const [doctors, setDoctors] = useState([]);
+    
     //api call
     useEffect(() => {
 
-        axios.get("https://jsonplaceholder.typicode.com/users")
+        axios.get("http://localhost:5001/doctors")
             .then((response) => {
-                setUsers(response.data);
+                setDoctors(response.data);
                 console.log(response.data)
             })
             .catch((err) => {
                 console.log(err);
             })
     }, [])
-     
-
-    // Get by id
-
-   function getsingleUser(id){
-    useEffect(()=>{
-        axios.get(`https://jsonplaceholder.typicode.com/users/${id}`)
-            .then((response) => {
-                setsingleUser(response.data);
-                console.log(response.data)
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-
-    },[])
-
-   }
 
     return (
         <View style={styles.container}>
 
             <FlatList
 
-                data={users?.map(item => item) || []}
+                data={doctors?.map(item => item) || []}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
                     <View style={styles.itemContainer}>
 
                         <Image source={{ uri: "https://plus.unsplash.com/premium_photo-1661766718556-13c2efac1388?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" }} style={styles.image} />
                         <View>
-                            <TouchableOpacity style={styles.button} 
-                             onPress={() => navigation.navigate('Booking Details')}>
-                                <Text style={styles.buttonText}>BOOK</Text>
+                            <TouchableOpacity style={styles.button}
+                                onPress={() => navigation.navigate('Booking Details', {id: item.id})}>
+                                <Text style={styles.buttonText}>MANAGE</Text>
                             </TouchableOpacity></View>
                         <View style={styles.detailsContainer}>
 
                             <Text style={styles.name}>{item.name}</Text>
 
-                            <Text style={styles.specialization}>{item.address.city}</Text>
+                            <Text style={styles.specialization}>{item.specialization}</Text>
                         </View>
                     </View>
                 )}

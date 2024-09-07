@@ -1,48 +1,72 @@
-import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, Alert, Image } from 'react-native';
+import axios from 'axios';
+import { useRoute } from "@react-navigation/native"
 
-const BookingDetails = () => {
+const BookingDetails = ({navigation}) => {
 
-  // Example doctor data
-  const doctor = {
-    image: 'https://plus.unsplash.com/premium_photo-1661764878654-3d0fc2eefcca?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8ZG9jdG9yfGVufDB8fDB8fHww',
-    name: 'Dr. John Doe',
-    description: 'Specialist in Cardiology with 10 years of experience.',
-    bookingTime: '10:00 AM - 11:00 AM',
-  };
+  const route = useRoute();
+  const id = route.params?.id;
+
+  const [singleDoctor, setSingleDoctor] = useState([]);
+
+  // Get by id
+  useEffect(() => {
+    axios.get(`http://localhost:5001/doctors/${id}`)
+      .then((response) => {
+        setSingleDoctor(response.data);
+        console.log(response.data)
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }, [])
+
 
   const handleEditBooking = () => {
     Alert.alert("Edit Booking", "Redirect to booking editing screen.");
   };
 
+
   const handleDeleteBooking = () => {
-    Alert.alert("Delete Booking", "Are you sure you want to delete this booking?", [
-      { text: 'Cancel', style: 'cancel' },
-      { text: 'Delete', onPress: () => console.log('Booking deleted') },
-    ]);
-  };
+    const flag = confirm("Are you sure you want to delete ?")
+    if (flag) {
+      axios.delete(`http://localhost:5001/doctors/${id}`)
+        .then(() => {
+          alert("Doctor deleted");
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    }
+  }
 
   return (
     <View style={styles.container}>
       {/* Doctor Image */}
-      <Image source={{ uri: doctor.image }} style={styles.doctorImage} />
+      <Image source={{ uri: "https://plus.unsplash.com/premium_photo-1661764878654-3d0fc2eefcca?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8ZG9jdG9yfGVufDB8fDB8fHww" }} style={styles.doctorImage} />
 
       {/* Doctor Name */}
-      <Text style={styles.doctorName}>{doctor.name}</Text>
+      <Text style={styles.doctorName}>{singleDoctor.name}</Text>
 
       {/* Doctor Description */}
-      <Text style={styles.description}>{doctor.description}</Text>
+      <Text style={styles.description}>{singleDoctor.description}</Text>
 
       {/* Booking Time */}
-      <Text style={styles.bookingTime}>Booking Time: {doctor.bookingTime}</Text>
+      <Text style={styles.mobileNumber}>{singleDoctor.mobileNumber}</Text>
 
       {/* Edit Booking Button */}
-      <TouchableOpacity style={styles.editButton} onPress={handleEditBooking}>
+      <TouchableOpacity style={styles.editButton} onPress={() => {
+        navigation.navigate("Update Doctor",{id: singleDoctor.id})
+      }
+      }>
         <Text style={styles.buttonText}>Edit Booking</Text>
       </TouchableOpacity>
 
       {/* Delete Booking Button */}
-      <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteBooking}>
+      <TouchableOpacity style={styles.deleteButton} onPress={() => {
+        handleDeleteBooking()
+      }}>
         <Text style={styles.buttonText}>Delete Booking</Text>
       </TouchableOpacity>
     </View>
@@ -73,7 +97,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 20,
   },
-  bookingTime: {
+  mobileNumber: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#2c3e50',
